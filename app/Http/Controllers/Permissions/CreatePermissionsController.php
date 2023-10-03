@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Permissions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PermissionsCreateController extends Controller
+class CreatePermissionsController extends Controller
 {
-    public function create(){
+    public function __invoke()
+    {
 
-        return view('permissions.create');
     }
 }
