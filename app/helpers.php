@@ -1,33 +1,40 @@
 <?php
 
-
 use GuzzleHttp\Client;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Request as RequestAlias;
 
-function uploadFile(UploadedFile $file, int $fileName, string $path)
-{
-    $pathName = sprintf($path.'/%s.png', $fileName);
-    Storage::disk('public')->put($pathName, file_get_contents($file));
-    $client = new Client();
-    $url = getenv('URL_UPLOADER');
+if (!function_exists('uploadFile')) {
+    function uploadFile(UploadedFile $file, int $fileName, string $path): void
+    {
+        $pathName = sprintf('%s/%s.png', trim($path, '/'), $fileName);
+        Storage::disk('public')->put($pathName, file_get_contents($file));
 
-    $client->request(RequestAlias::METHOD_POST, $url, [
-        'multipart' => [
-            [
-                'name' => 'image',
-                'contents' => fopen(
-                        str_replace('\\', '/', storage_path('app/public/'.$path.'/'.$fileName.'.png')),
-                    'r'
-                )
-            ],
-            [
-                'name' => 'path',
-                'contents' => $path
-            ]
-        ]
-    ]);
-    unlink(str_replace('\\', '/', storage_path('app/public/'.$path.'/'.$fileName.'.png')));
+        $url = env('URL_UPLOADER');
+        if (!empty($url)) {
+            try {
+                $client = new Client();
+                $localPath = Storage::disk('public')->path($pathName);
+                if (file_exists($localPath)) {
+                    $client->request(RequestAlias::METHOD_POST, $url, [
+                        'multipart' => [
+                            [
+                                'name' => 'image',
+                                'contents' => fopen($localPath, 'r')
+                            ],
+                            [
+                                'name' => 'path',
+                                'contents' => $path
+                            ]
+                        ]
+                    ]);
+                    @unlink($localPath);
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Remote upload failed, keeping local file: ' . $e->getMessage());
+            }
+        }
+    }
 }
-

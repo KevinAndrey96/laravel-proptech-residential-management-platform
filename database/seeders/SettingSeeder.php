@@ -14,26 +14,19 @@ class SettingSeeder extends Seeder
      */
     public function run()
     {
-        $setting = new Setting();
-        $setting->name = 'reservadetoscana';
-        $setting->num_tower = 20;
-        $setting->num_int = 120;
-        $setting->num_apt = 1200;
-        $setting->logo = 'dsad';
-        $setting->principal_color = '#23A711';
-        $setting->second_color = '#424C40';
-        $setting->third_color = '#306AAD';
-        $setting->fourth_color = "#AD3630";
-        $setting->glossary = 'Aliquam porttitor luctus lacinia. Cras bibendum luctus ante, eu rhoncus risus volutpat ac.
-        Nulla eget felis eget mi molestie rutrum ac non elit.';
-        $setting->save();
-
-
-
-
-
-
-
-
+        Setting::firstOrCreate(
+            ['name' => 'Reserva de Toscana'],
+            [
+                'num_tower' => 20,
+                'num_int' => 120,
+                'num_apt' => 1200,
+                'logo' => 'logo-complex.png',
+                'principal_color' => '#23A711',
+                'second_color' => '#424C40',
+                'third_color' => '#306AAD',
+                'fourth_color' => '#AD3630',
+                'glossary' => 'Portal integral de administración, gestión de reservas y control de pagos del conjunto residencial.',
+            ]
+        );
     }
 }

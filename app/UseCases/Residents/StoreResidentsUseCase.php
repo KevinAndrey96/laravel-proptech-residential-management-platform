@@ -7,7 +7,6 @@ use App\Models\User;
 use App\UseCases\Contracts\Residents\StoreResidentsUseCaseInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Psy\Readline\Hoa\Exception;
 
 /**
  * Class StoreResidentsUseCase
@@ -15,38 +14,37 @@ use Psy\Readline\Hoa\Exception;
  */
 class StoreResidentsUseCase implements StoreResidentsUseCaseInterface
 {
-    public function handle(Request $request):bool
+    public function handle(Request $request): bool
     {
-            $users = User::all();
-            $user = User::where('email', $request->input('email'))->first();
+        if (User::where('email', $request->input('email'))->exists()) {
+            return true;
+        }
 
-            if (isset($user)) {
-                return true;
-            }
+        $apartmentOccupied = Resident::where('tower', $request->input('tower'))
+            ->where('apt', $request->input('apt'))
+            ->exists();
 
-            foreach ($users as $user) {
-                if ($user->role == 'Resident') {
-                    if ($user->resident->tower == $request->input('tower') && $user->resident->apt == $request->input('apt')) {
-                        return true;
-                    }
-                }
-            }
+        if ($apartmentOccupied) {
+            return true;
+        }
 
-            $user = new User();
-            $user->name = $request->name;
-            $user->phone = $request->phone;
-            $user->email = $request->email;
-            $user->role = $request->role;
-            $user->password = Hash::make($request->phone);
-            $user->save();
-            $resident = new Resident();
-            $resident->tower = $request->input('tower');
-            $resident->apt = $request->input('apt');
-            $resident->status = $request->input('status');
-            $resident->user_id = $user->id;
-            $resident->save();
-            $user->assignRole('Resident');
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->phone = $request->input('phone');
+        $user->email = $request->input('email');
+        $user->role = $request->input('role', 'Resident');
+        $user->password = Hash::make($request->input('phone', 'secret123'));
+        $user->save();
 
-            return false;
+        $resident = new Resident();
+        $resident->tower = $request->input('tower');
+        $resident->apt = $request->input('apt');
+        $resident->status = $request->input('status', 'Habilitado');
+        $resident->user_id = $user->id;
+        $resident->save();
+
+        $user->assignRole('Resident');
+
+        return false;
     }
 }

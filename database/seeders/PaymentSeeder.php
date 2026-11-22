@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder
@@ -14,62 +15,21 @@ class PaymentSeeder extends Seeder
      */
     public function run()
     {
-        /*
-        $payment = new Payment();
-        $payment->year = '2021';
-        $payment->month = '08';
-        $payment->user_id = 7;
-        $payment->save();
+        $resident = User::where('role', 'Resident')->first();
+        if ($resident) {
+            $periods = [
+                ['year' => '2024', 'month' => '01'],
+                ['year' => '2024', 'month' => '02'],
+                ['year' => '2024', 'month' => '03'],
+            ];
 
-        $payment = new Payment();
-        $payment->year = '2021';
-        $payment->month = '09';
-        $payment->user_id = 7;
-        $payment->save();
-
-        $payment = new Payment();
-        $payment->year = '2021';
-        $payment->month = '10';
-        $payment->user_id = 7;
-        $payment->save();
-
-
-        $payment = new Payment();
-        $payment->year = '2021';
-        $payment->month = '07';
-        $payment->user_id = 22;
-        $payment->save();
-
-
-        $payment = new Payment();
-        $payment->year = '2022';
-        $payment->month = '08';
-        $payment->user_id = 22;
-        $payment->save();
-
-        $payment = new Payment();
-        $payment->year = '2022';
-        $payment->month = '09';
-        $payment->user_id = 22;
-        $payment->save();
-
-        $payment = new Payment();
-        $payment->year = '2022';
-        $payment->month = '10';
-        $payment->user_id = 22;
-        $payment->save();
-
-        $payment = new Payment();
-        $payment->year = '2021';
-        $payment->month = '08';
-        $payment->user_id = 17;
-        $payment->save();
-
-        $payment = new Payment();
-        $payment->year = '2023';
-        $payment->month = '09';
-        $payment->user_id = 17;
-        $payment->save();
-    */
+            foreach ($periods as $period) {
+                Payment::firstOrCreate([
+                    'year' => $period['year'],
+                    'month' => $period['month'],
+                    'user_id' => $resident->id,
+                ]);
+            }
+        }
     }
 }

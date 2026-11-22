@@ -66,7 +66,7 @@ class StoreBookingsUseCase implements StoreBookingsUseCaseInterface
                             $booking->date = $request->input('date');
                             $booking->day = $day;
                             $booking->hour = $request->input('hour');
-                            $booking->state = $request->input('state');
+                            $booking->state = $request->input('state') ?: 'Reservada';
                             $booking->user_id = Auth::user()->id;
                             $booking->service_id = $service->id;
                             $booking->save();

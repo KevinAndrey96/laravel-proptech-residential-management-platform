@@ -14,6 +14,18 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        //Permission::create(['name' => 'edit articles']);
+        $permissions = [
+            'manage bookings',
+            'manage residents',
+            'manage services',
+            'manage parkings',
+            'manage payments',
+            'manage news',
+            'view reports',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
     }
 }

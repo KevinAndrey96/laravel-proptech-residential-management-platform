@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{App\Models\Setting::find(1)->name}}</title>
+    <title>{{App\Models\Setting::find(1)?->name ?? config('app.name', 'Residential Complex')}}</title>
     <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesnt work if you view the page via file: -->
     <!--[if lt IE 10]>
@@ -17,7 +17,7 @@
       <meta name="keywords" content="bootstrap, bootstrap admin template, admin theme, admin dashboard, dashboard template, admin template, responsive" />
       <meta name="author" content="codedthemes" />
       <!-- Favicon icon -->
-      <link rel="icon" href="{{getenv('APP_URL').'/'.App\Models\Setting::find(1)->logo}}" type="image/x-icon">
+      <link rel="icon" href="{{App\Models\Setting::find(1)?->logo ? asset(App\Models\Setting::find(1)->logo) : asset('favicon.ico')}}" type="image/x-icon">
     <!-- Required Jquery -->
     <script type="text/javascript" src="/js/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui/jquery-ui.min.js "></script>
@@ -66,7 +66,7 @@
 <body>
   <div id="pcoded" class="pcoded">
       <div class="pcoded-container navbar-wrapper">
-          <nav style="background-color: {{App\Models\Setting::find(1)->principal_color}}; padding: 5px 0px" class="navbar header-navbar pcoded-header" header-theme="theme2">
+          <nav style="background-color: {{App\Models\Setting::find(1)?->principal_color ?? '#23A711'}}; padding: 5px 0px" class="navbar header-navbar pcoded-header" header-theme="theme2">
               <div class="navbar-wrapper">
                   <div class="navbar-logo">
                       <a class="mobile-menu waves-effect waves-light" id="mobile-collapse" href="#!">
@@ -85,7 +85,7 @@
                       </div>
                       <div style="margin: 11px auto;">
                       <a href="/home">
-                          <img style="width: 50px;" class="img-fluid img-responsive center-block" src="{{getenv('APP_URL').'/'.App\Models\Setting::find(1)->logo}}" alt="Theme-Logo" />
+                          <img style="width: 50px;" class="img-fluid img-responsive center-block" src="{{App\Models\Setting::find(1)?->logo ? asset(App\Models\Setting::find(1)->logo) : asset('assets/images/logo.png')}}" alt="Theme-Logo" />
                       </a>
                       </div>
                       <a class="mobile-options waves-effect waves-light">
@@ -410,7 +410,7 @@
                               <div class="row align-items-center">
                                   <div class="col-md-12">
                                       <div class="page-header-title text-center mt-3">
-                                          <h5 style="margin-bottom: -1px;">{{App\Models\Setting::find(1)->name}}</h5>
+                                          <h5 style="margin-bottom: -1px;">{{App\Models\Setting::find(1)?->name ?? config('app.name', 'Residential Complex')}}</h5>
                                           <p class="m-b-0">
                                             @hasrole('Superadmin')
                                               Bienvenido Super Administrador

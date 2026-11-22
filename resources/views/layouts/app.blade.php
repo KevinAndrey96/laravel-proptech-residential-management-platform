@@ -24,9 +24,9 @@
         <nav style="background-color: red" class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img style="width: 50px;" class="img-fluid img-responsive center-block" src="{{getenv('APP_URL').'/'.App\Models\Setting::find(1)->logo}}" alt="Theme-Logo" />
+                    <img style="width: 50px;" class="img-fluid img-responsive center-block" src="{{App\Models\Setting::find(1)?->logo ? asset(App\Models\Setting::find(1)->logo) : asset('assets/images/logo.png')}}" alt="Theme-Logo" />
                 </a>
-                <button class="navbar-toggler" style="border-color:{{App\Models\Setting::find(1)->principal_color}};  background-color: {{App\Models\Setting::find(1)->principal_color}};"
+                <button class="navbar-toggler" style="border-color:{{App\Models\Setting::find(1)?->principal_color ?? '#23A711'}};  background-color: {{App\Models\Setting::find(1)?->principal_color ?? '#23A711'}};"
                         type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
