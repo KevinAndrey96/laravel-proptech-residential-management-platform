@@ -1,6 +1,6 @@
-# Residential Complex Management & PropTech Platform
+# PropTech Residential Management Platform
 
-[![CI](https://github.com/KevinAndrey96/residential-complex/actions/workflows/ci.yml/badge.svg)](https://github.com/KevinAndrey96/residential-complex/actions/workflows/ci.yml)
+[![CI](https://github.com/KevinAndrey96/proptech-residential-management-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/KevinAndrey96/proptech-residential-management-platform/actions/workflows/ci.yml)
 [![PHP Version](https://img.shields.io/badge/PHP-8.1%20%7C%208.2-777BB4?logo=php&logoColor=white)](https://www.php.net/)
 [![Laravel](https://img.shields.io/badge/Laravel-8.83-FF2D20?logo=laravel&logoColor=white)](https://laravel.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
@@ -107,8 +107,8 @@ app/
 
 ### 1. Clone the Repository
 ```bash
-git clone git@github.com:KevinAndrey96/residential-complex.git
-cd residential-complex
+git clone git@github.com:KevinAndrey96/proptech-residential-management-platform.git
+cd proptech-residential-management-platform
 ```
 
 ### 2. Configure Environment
