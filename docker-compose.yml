@@ -15,7 +15,7 @@ services:
       DB_PORT: 3306
       DB_DATABASE: residential_complex_db
       DB_USERNAME: root
-      DB_PASSWORD: REDACTED_DB_PASSWORD
+      DB_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD in .env}
       MAIL_HOST: mailpit
       MAIL_PORT: 1025
     depends_on:
@@ -45,16 +45,16 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: REDACTED_DB_PASSWORD
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD in .env}
       MYSQL_DATABASE: residential_complex_db
       MYSQL_USER: user
-      MYSQL_PASSWORD: REDACTED_DB_PASSWORD
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD in .env}
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - residential_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pREDACTED_DB_PASSWORD"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$$MYSQL_ROOT_PASSWORD\""]
       interval: 5s
       timeout: 5s
       retries: 10

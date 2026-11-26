@@ -1,58 +1,57 @@
 # PropTech Residential Management Platform
 
 [![CI](https://github.com/KevinAndrey96/proptech-residential-management-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/KevinAndrey96/proptech-residential-management-platform/actions/workflows/ci.yml)
-[![PHP Version](https://img.shields.io/badge/PHP-8.1%20%7C%208.2-777BB4?logo=php&logoColor=white)](https://www.php.net/)
+[![PHP](https://img.shields.io/badge/PHP-8.1%20%7C%208.2-777BB4?logo=php&logoColor=white)](https://www.php.net/)
 [![Laravel](https://img.shields.io/badge/Laravel-8.83-FF2D20?logo=laravel&logoColor=white)](https://laravel.com/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An enterprise condominium administration, clubhouse social zone booking, parking allocation, and payments management platform. Successfully deployed and operated in production across multi-tower residential complexes (including Reserva de Toscana), managing hundreds of apartments, inhabitants, social spaces, and financial dues.
-
----
-
-## Key Features
-
-- **Clubhouse & Social Zones Booking Engine**:
-  - Configurable capacity limits, time slot intervals (`strip` in minutes), and day-of-week operating schedules.
-  - Conflict prevention for concurrent reservations and per-resident daily limits.
-  - Automated cron command (`php artisan booking:cancel`) to expire abandoned reservations and update past schedules.
-  - Email notification pipeline via Mailable templates upon reservation confirmation.
-
-- **Parking Allocation & Security Guard Operations**:
-  - Segmented parking zones (Resident vs Visitor).
-  - Real-time space occupancy toggle and maintenance lockouts.
-  - Detailed security guard entry/exit registry (`DetailSpaceOccupation`) capturing license plate, visitor name, destination apartment, and observation logs.
-
-- **Financial Dues & Payments Management**:
-  - Resident monthly condominium dues tracking and verification.
-  - Multi-year and month filtering, payment receipt download, and duplicate payment prevention.
-  - Resident self-service portal to verify payment status and billing history.
-
-- **Resident, Vehicle & Pet Registry**:
-  - Apartment and tower inventory mapping with inhabitant counts.
-  - Co-habitant records, authorized vehicles, and pet registry.
-  - One-click status toggling (Habilitado / Inhabilitado) to govern amenity access.
-
-- **Role-Based Access Control (RBAC)**:
-  - Granular permissions powered by Spatie Laravel-Permission.
-  - Built-in roles: `Superadmin`, `Administrator`, `Receptionist`, `Resident`, and `Watchman` (Guardia de Seguridad).
+Plataforma de administración de condominios: reservas del salón social y zonas comunes, asignación de parqueaderos, gestión de pagos y de residentes. Operada en producción en complejos residenciales de varias torres (incluido Reserva de Toscana), con cientos de apartamentos, habitantes, espacios sociales y cuotas administrativas.
 
 ---
 
-## Clean Architecture & System Design
+## Características principales
 
-The application follows Clean Architecture principles to isolate domain business rules from HTTP controllers and persistence layers:
+- **Motor de reservas de salón social y zonas comunes**:
+  - Límites de capacidad configurables, intervalos de horario (`strip` en minutos) y horarios de operación por día de la semana.
+  - Prevención de conflictos en reservas simultáneas y límites diarios por residente.
+  - Comando automatizado (`php artisan booking:cancel`) para expirar reservas abandonadas y actualizar horarios pasados.
+  - Notificación por correo mediante plantillas Mailable al confirmar una reserva.
+
+- **Asignación de parqueaderos y operación de seguridad**:
+  - Zonas de parqueo segmentadas (residente y visitante).
+  - Cambio de ocupación en tiempo real y bloqueos por mantenimiento.
+  - Registro detallado de entradas y salidas del guardia de seguridad (`DetailSpaceOccupation`), con placa, nombre del visitante, apartamento de destino y observaciones.
+
+- **Cuotas y gestión de pagos**:
+  - Seguimiento y verificación de las cuotas mensuales del condominio.
+  - Filtros por año y mes, descarga de comprobantes y prevención de pagos duplicados.
+  - Portal de autoservicio para que el residente consulte el estado de pagos y su historial de facturación.
+
+- **Registro de residentes, vehículos y mascotas**:
+  - Inventario de apartamentos y torres con número de habitantes.
+  - Registro de convivientes, vehículos autorizados y mascotas.
+  - Cambio de estado con un clic (Habilitado / Inhabilitado) para controlar el acceso a las zonas comunes.
+
+- **Control de acceso basado en roles (RBAC)**:
+  - Permisos granulares con Spatie Laravel-Permission.
+  - Roles incluidos: `Superadmin`, `Administrator`, `Receptionist`, `Resident` y `Watchman` (Guardia de Seguridad).
+
+---
+
+## Arquitectura limpia y diseño del sistema
+
+La aplicación sigue los principios de Arquitectura Limpia para aislar las reglas de negocio de los controladores HTTP y de la capa de persistencia:
 
 ```
 app/
 ├── Console/
 │   └── Commands/
-│       └── CancelBookings.php           # Automated booking expiration worker
+│       └── CancelBookings.php           # Worker de expiración de reservas
 ├── DTOs/
-│   └── WatchmanDTO.php                  # Data Transfer Objects
+│   └── WatchmanDTO.php                  # Objetos de transferencia de datos
 ├── Http/
-│   ├── Controllers/                     # Thin controllers orchestrating requests
+│   ├── Controllers/                     # Controladores delgados que orquestan las peticiones
 │   │   ├── Bookings/
 │   │   ├── Residents/
 │   │   ├── Parkings/
@@ -60,7 +59,7 @@ app/
 │   │   ├── Payments/
 │   │   └── Services/
 │   └── Middleware/
-├── Models/                              # Eloquent entities & relationships
+├── Models/                              # Entidades Eloquent y sus relaciones
 │   ├── Booking.php
 │   ├── DetailSpaceOccupation.php
 │   ├── Parking.php
@@ -69,109 +68,112 @@ app/
 │   ├── Resident.php
 │   └── Service.php
 ├── Providers/
-│   ├── RepositoriesServicesProvider.php # IoC bindings for repository contracts
-│   └── UseCasesServicesProvider.php     # IoC bindings for use case contracts
-├── Repositories/                        # Data access layer
-│   ├── Contracts/                       # Abstract repository interfaces
+│   ├── RepositoriesServicesProvider.php # Enlaces del contenedor IoC para los contratos de repositorio
+│   └── UseCasesServicesProvider.php     # Enlaces del contenedor IoC para los contratos de casos de uso
+├── Repositories/                        # Capa de acceso a datos
+│   ├── Contracts/                       # Interfaces abstractas de repositorio
 │   ├── DetailSpaceOccupations/
 │   ├── ParkingSpaces/
 │   ├── Parkings/
 │   ├── Payments/
 │   └── Residents/
-└── UseCases/                            # Encapsulated application business rules
-    ├── Contracts/                       # UseCase interfaces
-    ├── Bookings/                        # Reservation validation & processing
-    ├── Residents/                       # Resident onboarding & status transitions
-    ├── Roles/                           # RBAC assignment logic
-    └── Services/                        # Social zones CRUD & schedule management
+└── UseCases/                            # Reglas de negocio de la aplicación encapsuladas
+    ├── Contracts/                       # Interfaces de casos de uso
+    ├── Bookings/                        # Validación y procesamiento de reservas
+    ├── Residents/                       # Alta de residentes y cambios de estado
+    ├── Roles/                           # Lógica de asignación de roles RBAC
+    └── Services/                        # CRUD de zonas sociales y gestión de horarios
 ```
 
 ---
 
-## Tech Stack
+## Stack tecnológico
 
-| Component | Technology | Version |
+| Componente | Tecnología | Versión |
 | :--- | :--- | :--- |
-| **Backend Framework** | Laravel | 8.83.27 |
-| **Runtime Language** | PHP | 8.1 / 8.2 |
-| **Database** | MySQL / SQLite (Testing) | 8.0 |
-| **Authorization** | Spatie Laravel-Permission | 4.4 |
-| **Excel / Reports** | Maatwebsite Excel | 3.1 |
+| **Framework backend** | Laravel | 8.83.27 |
+| **Lenguaje de ejecución** | PHP | 8.1 / 8.2 |
+| **Base de datos** | MySQL / SQLite (pruebas) | 8.0 |
+| **Autorización** | Spatie Laravel-Permission | 4.4 |
+| **Excel / reportes** | Maatwebsite Excel | 3.1 |
 | **DataTables** | Yajra DataTables Oracle | 9.21 |
-| **Containerization** | Docker & Docker Compose | 3.8 |
+| **Contenedores** | Docker y Docker Compose | 3.8 |
 | **CI / CD** | GitHub Actions | Ubuntu Latest |
 
 ---
 
-## Quickstart with Docker
+## Inicio rápido con Docker
 
-### 1. Clone the Repository
+### 1. Clonar el repositorio
 ```bash
 git clone git@github.com:KevinAndrey96/proptech-residential-management-platform.git
 cd proptech-residential-management-platform
 ```
 
-### 2. Configure Environment
+### 2. Configurar el entorno
 ```bash
 cp .env.example .env
 ```
+Edita `.env` y define `DB_PASSWORD`. Docker Compose lee esta variable para la base de datos y no arranca si está vacía.
 
-### 3. Launch Containers
+### 3. Levantar los contenedores
 ```bash
 docker compose up -d --build
 ```
-This boots up:
-- **Web**: Nginx 1.25 Alpine on port `8000`
-- **App**: PHP 8.1 FPM with required extensions (pdo_mysql, gd, zip, bcmath)
-- **Database**: MySQL 8.0 on port `3306`
-- **Mail**: Mailpit web UI on port `8025` (SMTP port `1025`)
+Esto levanta:
+- **Web**: Nginx 1.25 Alpine en el puerto `8000`
+- **App**: PHP 8.1 FPM con las extensiones necesarias (pdo_mysql, gd, zip, bcmath)
+- **Base de datos**: MySQL 8.0 en el puerto `3306`
+- **Correo**: interfaz web de Mailpit en el puerto `8025` (SMTP en el `1025`)
 
-### 4. Run Migrations & Seed Initial Data
+### 4. Generar la clave y cargar datos iniciales
 ```bash
 docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 ```
 
-### 5. Access the Platform
-- **Application Portal**: [http://localhost:8000](http://localhost:8000)
-- **Mailpit Webhook / Inbox**: [http://localhost:8025](http://localhost:8025)
+### 5. Acceder a la plataforma
+- **Portal de la aplicación**: [http://localhost:8000](http://localhost:8000)
+- **Buzón de Mailpit**: [http://localhost:8025](http://localhost:8025)
 
 ---
 
-## Default Seeded Accounts
+## Cuentas de prueba precargadas
 
-The database seeder provisions standard test accounts for evaluation:
+El seeder de la base de datos crea cuentas de prueba para evaluación. No las uses en producción y cámbialas antes de desplegar.
 
-| Role | Email | Password | Access Scope |
+| Rol | Correo | Contraseña | Alcance |
 | :--- | :--- | :--- | :--- |
-| **Superadmin** | `superadmin@example.com` | `superadmin123` | Full system control & settings |
-| **Administrator** | `administrator@example.com` | `administrator123` | Complex management & payments |
-| **Receptionist** | `receptionist@example.com` | `receptionist123` | Social zones, news, visitors |
-| **Resident** | `resident@example.com` | `resident123` | Social zone bookings & payment logs |
+| **Superadmin** | `superadmin@example.com` | `superadmin123` | Control total del sistema y configuración |
+| **Administrator** | `administrator@example.com` | `administrator123` | Gestión del complejo y pagos |
+| **Receptionist** | `receptionist@example.com` | `receptionist123` | Zonas sociales, noticias y visitantes |
+| **Resident** | `resident@example.com` | `resident123` | Reservas de zonas sociales y registro de pagos |
 
 ---
 
-## Automated Testing
+## Pruebas automatizadas
 
-The platform includes a test suite covering feature workflows and unit business rules:
+La plataforma incluye una suite de pruebas que cubre los flujos funcionales y las reglas de negocio:
 
 ```bash
-# Run tests inside Docker
+# Ejecutar las pruebas dentro de Docker
 docker compose exec app vendor/bin/phpunit
 
-# Or run via ephemeral container
+# O en un contenedor efímero
 docker run --rm -v $(pwd):/var/www/html residential-complex-app vendor/bin/phpunit
 ```
 
-### Test Coverage Highlights
-- **`BookingTest`**: Service listing, reservation creation, 24-hour expiration cron validation, and status transitions.
-- **`ResidentTest`**: Administrator resident registration, duplicate apartment prevention, and status toggles.
-- **`ParkingTest`**: Parking lot auto-space generation, status and availability toggles, and security guard entry logging.
-- **`PaymentTest`**: Condominium dues recording, duplicate payment prevention for the same month, and resident history view.
-- **`ServiceUseCaseTest`**: Clean architecture use cases for clubhouse social amenities creation, schedule hours, and soft-deletion.
+### Cobertura destacada
+- **`BookingTest`**: listado de servicios, creación de reservas, validación de expiración de 24 horas por cron y transiciones de estado.
+- **`ResidentTest`**: registro de residentes por el administrador, prevención de apartamentos duplicados y cambios de estado.
+- **`ParkingTest`**: generación automática de espacios de parqueo, cambio de estado y disponibilidad, y registro de entradas del guardia.
+- **`PaymentTest`**: registro de cuotas, prevención de pagos duplicados para el mismo mes y vista del historial del residente.
+- **`ServiceUseCaseTest`**: casos de uso de arquitectura limpia para crear zonas sociales, definir horarios y eliminación lógica.
 
 ---
 
-## License
+## Licencia
 
-This project is open-source software licensed under the [MIT License](LICENSE).
+Sin licencia de código abierto. Todos los derechos reservados.
+
+El código se publica solo como referencia. Su uso, copia, modificación o redistribución requiere autorización expresa del titular.
